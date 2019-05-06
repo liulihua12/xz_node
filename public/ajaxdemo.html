@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<button onclick="getMsg()">提交</button>
+	<script>
+		function getMsg(){
+			var xhr=new XMLHttpRequest();
+			xhr.open("get","http://localhost:8080/demo/ajaxdemo",true);
+			xhr.send(null);
+		}
+	</script>
+</body>
+</html>
