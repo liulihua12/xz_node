@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<button onclick="getXml()">异步请求xml</button>
+	<script>
+		function getXml(){
+			var xhr= new XMLHttpRequest();
+			xhr.onreadystatechange=()=>{
+				if(xhr.readyState==4 && xhr.status==200){
+					var result=xhr.responseXML;
+					console.log(result);
+					var studentlist=result.getElementsByTagName("studentlist")[0];
+					console.log(studentlist);
+					var student=studentlist.getElementsByTagName("student")[1];
+					console.log(student);
+					var name=student.getElementsByTagName("name")[0];
+					console.log(name.innerHTML);
+				}
+			}
+			xhr.open("get","04.xml",true);
+			xhr.send(null);
+		}
+	</script>
+</body>
+</html>

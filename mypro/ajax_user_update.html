@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>修改用户</title>
+</head>
+<body onload="sel_user()">
+	<h2>修改用户</h2>
+	用户名称：<input type="text" id="uname"><br>
+	用户密码：<input type="text" id="upwd"><br>
+	联系方式：<input type="text" id="phone"><br>
+	真实姓名：<input type="text" id="user_name"><br>
+	用户邮箱：<input type="text" id="email"><br>
+	用户性别：<input type="radio" id="gender1"name="sex"value="1">
+			  <label for="gender1">男</label>
+			  <input type="radio" id="gender0" name="sex"value="0">
+			  <label for="gender0">女</label><br>
+			  <button onclick="up_user()" style="width:250px;">提交</button>
+	<script>
+	//获取ID值
+			var urlParams=new URLSearchParams(location.search);
+			var uid=urlParams.get("uid");
+	//查询数据
+		function sel_user(){
+			//创建对象
+			var xhr=new XMLHttpRequest();
+			//监听事件，接收响应
+			xhr.onreadystatechange=()=>{
+				if(xhr.readyState==4 && xhr.status==200){
+					var result=xhr.responseText;
+					var arr=JSON.parse(result);//JSON解析
+					uname.value=arr[0].uname;
+					upwd.value=arr[0].upwd;
+					phone.value=arr[0].phone;
+					user_name.value=arr[0].user_name;
+					email.value=arr[0].email;
+					if(arr[0].gender=="1"){
+						gender1.checked=true;
+					}
+					if(arr[0].gender=="0"){
+						gender0.checked=true;
+					}
+				}
+			}
+			//创建请求
+			xhr.open("get","/mypro/select?uid="+uid,true);
+			//发送请求
+			xhr.send(null);
+		}
+
+	//修改数据
+		function up_user(){
+			//创建对象
+			var xhr=new XMLHttpRequest();
+			//监听端口,接收响应
+			xhr.onreadystatechange=()=>{
+				if(xhr.readyState==4 && xhr.status==200){
+					var result=xhr.responseText;
+					eval(result);
+				}
+			}
+			//建立连接 创建请求
+			xhr.open("post","/mypro/update",true);
+			//发送请求
+			var gender="";
+			if(gender1.checked==true){
+				gender=gender1.value;
+			}else if(gender0.checked==true){
+				gender=gender0.value;			
+			}else{
+				gender=null;
+			}
+			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");//设置响应头
+			var formdata="uname="+uname.value+"&upwd="+upwd.value+"&phone="+phone.value+"&user_name="+user_name.value+
+			"&email="+email.value+"&gender="+gender+"&uid="+uid;
+			xhr.send(formdata);
+		}
+	</script>
+</body>
+</html>

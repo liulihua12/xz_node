@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div>
+		<input type="text" id="uname">
+	</div>
+	<div>
+		<input type="password" id="upwd">
+	</div>
+	<button onclick="login()">登录</button>
+
+	<script>
+		function login(){
+			//1.创建异步对象
+			var xhr=new XMLHttpRequest();
+			//4.绑定监听，接收响应
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState==4 && xhr.status==200){
+					var result=xhr.responseText;
+					alert(result);
+				}
+			};
+			//2.打开连接，创建请求
+			var url="/demo_user/login?uname="+uname.value+"&upwd="+upwd.value;
+			xhr.open("get",url,true);
+			//3.发送请求
+			xhr.send(null);
+		}
+	</script>
+</body>
+</html>

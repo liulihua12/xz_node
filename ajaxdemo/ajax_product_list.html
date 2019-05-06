@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='zh-cn'>
+<head>
+	<meta charset='utf-8'>
+	<title>商品列表</title>
+</head>
+<body>
+	<h2>商品列表</h2>
+	页码:<input type='text' id='pno'><br>
+	数量:<input type='text' id='count'>
+	<p id="p1">结果：</p>
+	<button onclick="show()">提交</button>
+	<script>
+		function show(){
+			//创建新对象
+			var xhr=new XMLHttpRequest();
+			//绑定监听，接收响应
+			xhr.onreadystatechange=()=>{
+				//判断条件
+				if(xhr.readyState==4 && xhr.status==200){
+					//接收响应主体
+					var result=xhr.responseText;
+					//转换为数组对象
+					var arr=JSON.parse(result);
+					//在p1中打印所有的name，用，分割
+					for(var i=0,names="";i<arr.length;i++){
+						names+="<h2>"+arr[i].lname+"</h2>";
+					}
+					p1.innerHTML=names;
+				}
+			}
+			//创建链接
+			var url="demo_product/list?pno="+pno.value+"&count="+count.value;
+			xhr.open("get",url,true);
+			//发送链接
+			xhr.send(null);
+		}
+	</script>
+</body>
+</html>
+
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<title>用户列表</title>
+	</head>
+	<body onload="shw()">
+		<h2>用户列表</h2>
+		页码：<input type="text" id="pno"><br>
+		数量：<input type="text" id="count">
+		<button onclick="shw()">按钮</button>
+		<table border="1px">
+			<thead>
+				<tr>
+					<td><b>登录名称</b></td>
+					<td><b>电子邮箱</b></td>
+					<td><b>联系方式</b></td>
+					<td><b>用户姓名</b></td>
+					<td><b>用户性别</b></td>
+					<td><b>操作</b></td>
+				</tr>
+			</thead>
+			<tbody id="tbody"></tbody>
+		</table>
+		<script>
+			function shw(){
+				//创建xhr对象
+				var xhr=new XMLHttpRequest();
+				//监听事件，接收响应
+				xhr.onreadystatechange=()=>{
+					console.log(xhr.readyState);
+					console.log(xhr.status);
+					if(xhr.readyState==4 && xhr.status==200){
+						console.log(22222);
+						var result=xhr.responseText;
+						var arr=JSON.parse(result);
+						var html="";		
+						for(var i=0;i<arr.length;i++){
+							var gen_der="";
+							if(arr[i].gender==1){
+								gen_der="男";
+							}
+							if(arr[i].gender==0){
+								gen_der="女";
+							}else{
+								gen_der="不详";
+							}
+							html+=`
+								<tr>
+									<td>${arr[i].uname}</td>
+									<td>${arr[i].email}</td>
+									<td>${arr[i].phone}</td>
+									<td>${arr[i].user_name}</td>
+									<td>${gen_der}</td>
+									<td>
+										<a href="javascript:dltUser(${arr[i].uid})">删除</a>
+										<a href="ajax_user_update.html?uid=${arr[i].uid}">修改</a>
+									</td>
+								</tr>`
+						}
+								tbody.innerHTML=html;
+					}
+				}
+				//创建请求
+				var url="/mypro/list?pno="+pno.value+"&count="+count.value;
+				xhr.open("get",url,true);
+				//发送请求
+				xhr.send(null);
+			}
+		
+			//删除用户
+			function dltUser(uid){
+				var xhr=new XMLHttpRequest();
+				xhr.onreadystatechange=()=>{
+					if(xhr.readyState==4 && xhr.status==200){
+						var result=xhr.responseText;
+						alert(result);
+						shw();
+					}
+				}
+				var url="/mypro/delete?uid="+uid;
+				xhr.open("get",url,true);
+				xhr.send(null);
+			}
+		</script>
+	</body>
+</html>

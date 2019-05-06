@@ -1,0 +1,28 @@
+<DCTYPE html>
+<html lang='zh-cn'>
+<head>
+	<meta charset='utf-8'>
+	<title>用户登录</title>
+</head>
+<body>
+	<h2>用户登录</h2>
+	用户:<input type='text' id='uname'></br>
+	密码:<input type='text' id='upwd'></br>
+		 <button onclick="sbm()">提交</button>
+	<script>
+		function sbm(){
+			var xhr=new XMLHttpRequest();
+			xhr.onreadystatechange=()=>{
+				if(xhr.readyState==4 && xhr.status==200){
+					var result=xhr.responseText;
+					alert(result);
+				}
+			}
+			xhr.open("post","/mypro/login",true);
+			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			var formdata="uname="+uname.value+"&upwd="+upwd.value;
+			xhr.send(formdata);
+		}
+	</script>
+</body>
+</html>
